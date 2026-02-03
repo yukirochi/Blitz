@@ -1,4 +1,4 @@
-# Blitz - Datablitz Price Monitoring System
+# Blitz - Datablitz Price Monitoring System-
 
 Monitor product prices and get instant Discord alerts when prices drop!
 

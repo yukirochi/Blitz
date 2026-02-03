@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from datetime import datetime
 import time
 import requests
-
+#made by yukirochi
 
 load_dotenv()
 
