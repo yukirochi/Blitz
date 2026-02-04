@@ -35,4 +35,5 @@ RUN pip install --no-cache-dir selenium webdriver-manager beautifulsoup4 python-
 
 # STEP 4: Copy your code and run
 COPY Blitz.py .
-CMD ["python3", "Blitz.py"]
+COPY .env .
+CMD ["python3", "-u", "Blitz.py"]

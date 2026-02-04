@@ -4,14 +4,17 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-from datetime import datetime
 import time
 import requests
+import os
 #made by yukirochi
 
 load_dotenv()
 
-discord_Webhook = input("discord webhook: ").strip() 
+discord_Webhook = os.getenv('webhook')
+
+if not discord_Webhook:
+    raise ValueError("Discord webhook URL not found in environment variables.")
 
 current_price = None
 
@@ -20,7 +23,7 @@ def discord(target,price, link=None):
         return
  
     data = {
-        'content': f"🚨 **PRICE CHANGE ALERT** 🚨\n\nThe **{target}** is currently at **{price}** and the link is: {link}"
+        'content': f"**BLITZ**\n\nThe **{target}** is currently running **{price}**: {link}"
     }
     try:
         requests.post(discord_Webhook, json=data)
@@ -70,11 +73,20 @@ def scrape(url, last_price):
 
     
 if __name__ == "__main__":
-    url = input("Enter the Datablitz Product URL to scrape (e.g., games, consoles): ").strip()
+    url = os.getenv('target_product_url')
+    if not url:
+        raise ValueError("Target product URL not found in environment variables.")
     current_tracked_price = None 
 
     print("--- Monitoring Started (Press Ctrl+C to stop) ---")
-    discord("DataBlitz Price Monitor", f"Monitoring started at {datetime.now().strftime('%I:%M:%S %p')} for the item.", url)
-    while True:
-        current_tracked_price = scrape(url, current_tracked_price)
-        time.sleep(60)  # Wait for 1 minute before checking again    
+    discord("Blitz", "✓ Monitoring started for the item.", url)
+    try:
+        while True:
+            current_tracked_price = scrape(url, current_tracked_price)
+            time.sleep(60)  # Wait for 1 minute
+    except KeyboardInterrupt:
+        print("\n--- Monitoring Stopped ---")
+        discord("Blitz", "⏹️ Monitoring stopped.", url)
+    except Exception as e:
+        print(f"Error: {e}")
+        discord("Blitz", f"❌ Error occurred: {e}", url)    

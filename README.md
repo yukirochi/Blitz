@@ -1,116 +1,57 @@
-# Blitz - Datablitz Price Monitoring System-
+# Blitz — Simple Price Monitor (step-by-step)
 
-Monitor product prices and get instant Discord alerts when prices drop!
+This project watches a DataBlitz product page and sends a Discord message only when the price changes. Follow the numbered steps below — no deep technical knowledge required.
 
----
+What you need:
+- A computer (Windows, macOS, or Linux).
+- Either Docker installed (recommended) or Python 3.11 installed locally.
+- A Discord server where you can create a webhook (instructions below).
+- The DataBlitz product page URL you want to monitor.
 
-## Quick Start
+Step-by-step guide
+1. Create a Discord webhook (copy the URL)
+	- Open Discord (app or browser).
+	- Go to the server where you want alerts to appear.
+	- Click the server name → Server Settings → Integrations → Webhooks.
+	- Click "New Webhook", pick a channel and name, then click "Copy Webhook URL".
 
-Get up and running with Docker:
+2. Put the webhook and product URL into a `.env` file
+	- In the project folder, create a file named `.env` (plain text).
+	- Add these two lines, replacing the placeholders:
 
-1. **[Set Up Discord Webhook](#discord-webhook-setup)** 
-2. **[Build & Run with Docker](#docker-setup)**
-
----
-
-## Key Features
-
-- **Automated Price Tracking** - Continuously monitors product pages
-- **Discord Alerts** - Instant notifications with product details
-- **Smart Caching** - Avoids duplicate alerts
-- **Multi-URL Support** - Monitor multiple products simultaneously
-
----
-
-## Docker Setup
-
-### Prerequisites
-
-- Docker installed on your system
-- A Discord server/channel
-- Internet connection
-
-### Step 1: Clone the Repository
-
-```bash
-git clone https://github.com/yukirochi/Blitz.git
-cd Blitz
+```dotenv
+webhook=PASTE_YOUR_WEBHOOK_URL_HERE
+target_product_url=PASTE_DATA_BLITZ_PRODUCT_URL_HERE
 ```
 
-### Step 2: Build the Docker Image
+3. Run the monitor (choose one option)
+
+Option A — Recommended: Run with Docker (one command to start)
 
 ```bash
 docker build -t blitz .
+docker run --env-file .env --rm blitz
 ```
 
-This Dockerfile:
-- Uses Python 3.11 Slim as the base image
-- Installs Chrome browser and all required dependencies
-- Installs Python packages: `selenium`, `webdriver-manager`, `beautifulsoup4`, `python-dotenv`, `requests`
-- Copies your code and sets up the container to run Blitz
-
-### Step 3: Run the Docker Container
+Option B — Run locally with Python (if you prefer not to use Docker)
 
 ```bash
-docker run --rm blitz
-```
-
-You'll be prompted to enter your Discord webhook URL when the container starts.
-
-
----
-
-## Discord Webhook Setup
-
-Follow these steps to enable price alerts:
-
-1. Open your Discord server
-2. Go to the channel where you want alerts
-3. Click the **Cog Icon** → **Integrations**
-4. Select **Webhooks** → **New Webhook**
-5. Copy the webhook URL
-
-That's it! You now have your webhook URL.
-
----
-
-## Configuration and Usage
-
-### 1. Set Up Your Discord Webhook
-
-Follow the [Discord Webhook Setup](#discord-webhook-setup) section below to get your webhook URL.
-
-### 2. Add Products to Monitor
-
-Edit `Blitz.py` and add DataBlitz product URLs to your product list in the script.
-
-### 3. Run the Application
-
-**Using Docker (Recommended):**
-```bash
-docker run --rm blitz
-```
-
-**Using Python directly:**
-```bash
+pip install selenium webdriver-manager beautifulsoup4 python-dotenv requests
 python Blitz.py
 ```
 
-When prompted, enter your Discord webhook URL and the application will start monitoring!
+4. Stop the monitor
+- If you ran with Docker: press Ctrl+C in the terminal or stop the container.
+- If you ran `python Blitz.py`: press Ctrl+C in the terminal.
 
----
+5. Quick notes and small edits
+- The script checks the product regularly (default every 60 seconds). To change this, open [Blitz.py](Blitz.py) and edit the `time.sleep(60)` value to the number of seconds you prefer.
+- The Docker option already includes Chrome and the browser driver, which avoids local browser setup.
 
-## Coming Soon
+Troubleshooting
+- If you see errors about Chrome or the web driver when running locally, try the Docker option.
+- If Discord messages do not arrive, double-check the webhook URL in your `.env` file and make sure the webhook's channel is visible and has permission to post.
 
-We're building these features:
+Need help or a shorter checklist?
+- Tell me which part you want shortened or if you want a printable one-page checklist.
 
-- **Multi-Store Support** - Monitor more retailers
-- **Price History** - Track price trends over time
-- **Dashboard** - Visual management interface
-- **Telegram Support** - Get alerts on Telegram too
-
----
-
-## Need Help?
-
-Check the code comments or open an issue on GitHub!
