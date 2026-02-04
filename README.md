@@ -6,11 +6,10 @@ Monitor product prices and get instant Discord alerts when prices drop!
 
 ## Quick Start
 
-Get up and running in 3 easy steps:
+Get up and running with Docker:
 
-1. **[Install Dependencies](#installation)** 
-2. **[Set Up Discord Webhook](#discord-webhook-setup)** 
-3. **[Configure & Run](#configuration-and-usage)**
+1. **[Set Up Discord Webhook](#discord-webhook-setup)** 
+2. **[Build & Run with Docker](#docker-setup)**
 
 ---
 
@@ -23,13 +22,13 @@ Get up and running in 3 easy steps:
 
 ---
 
-## Installation
+## Docker Setup
 
 ### Prerequisites
 
-- Python 3.7 or higher
-- Internet connection
+- Docker installed on your system
 - A Discord server/channel
+- Internet connection
 
 ### Step 1: Clone the Repository
 
@@ -38,15 +37,26 @@ git clone https://github.com/yukirochi/Blitz.git
 cd Blitz
 ```
 
-### Step 2: Install Required Libraries
+### Step 2: Build the Docker Image
 
 ```bash
-pip install requests beautifulsoup4
+docker build -t blitz .
 ```
 
-**What these do:**
-- `requests` - Fetches web pages
-- `beautifulsoup4` - Parses product data
+This Dockerfile:
+- Uses Python 3.11 Slim as the base image
+- Installs Chrome browser and all required dependencies
+- Installs Python packages: `selenium`, `webdriver-manager`, `beautifulsoup4`, `python-dotenv`, `requests`
+- Copies your code and sets up the container to run Blitz
+
+### Step 3: Run the Docker Container
+
+```bash
+docker run --rm blitz
+```
+
+You'll be prompted to enter your Discord webhook URL when the container starts.
+
 
 ---
 
@@ -66,21 +76,27 @@ That's it! You now have your webhook URL.
 
 ## Configuration and Usage
 
-### 1. Add Your Discord Webhook
+### 1. Set Up Your Discord Webhook
 
-Open `Blitz.py` and add your webhook URL to the configuration.
+Follow the [Discord Webhook Setup](#discord-webhook-setup) section below to get your webhook URL.
 
 ### 2. Add Products to Monitor
 
-Add DataBlitz product URLs to your product list in the script.
+Edit `Blitz.py` and add DataBlitz product URLs to your product list in the script.
 
-### 3. Start Monitoring
+### 3. Run the Application
 
+**Using Docker (Recommended):**
+```bash
+docker run --rm blitz
+```
+
+**Using Python directly:**
 ```bash
 python Blitz.py
 ```
 
-Watch for alerts in your Discord channel!
+When prompted, enter your Discord webhook URL and the application will start monitoring!
 
 ---
 
