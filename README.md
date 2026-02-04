@@ -1,4 +1,4 @@
-# Blitz — Simple Price Monitor (step-by-step)
+# Blitz — Datablitz Product Price Monitor (step-by-step)
 
 This project watches a DataBlitz product page and sends a Discord message only when the price changes. Follow the numbered steps below — no deep technical knowledge required.
 
